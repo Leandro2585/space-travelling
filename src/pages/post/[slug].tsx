@@ -1,45 +1,45 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
+// import { GetStaticPaths, GetStaticProps } from 'next'
 
-import { getPrismicClient } from '../../services/prismic';
+import { getPrismicClient } from '../../services/prismic'
 
-import commonStyles from '../../styles/common.module.scss';
-import styles from './post.module.scss';
+// import commonStyles from '../../styles/common.module.scss'
+// import styles from './post.module.scss'
 
 interface Post {
-  first_publication_date: string | null;
+  first_publication_date: string | null
   data: {
-    title: string;
+    title: string
     banner: {
-      url: string;
-    };
-    author: string;
+      url: string
+    }
+    author: string
     content: {
-      heading: string;
+      heading: string
       body: {
-        text: string;
-      }[];
-    }[];
-  };
+        text: string
+      }[]
+    }[]
+  }
 }
 
 interface PostProps {
-  post: Post;
+  post: Post
 }
 
-// export default function Post() {
+export default function Post() {
+  return <h1>Post</h1>
+}
+
+// export const getStaticPaths = async () => {
+//   const prismic = getPrismicClient({})
+//   // const posts = await prismic.getByType(TODO)
+//   return { props: {} }
 //   // TODO
 // }
 
-// export const getStaticPaths = async () => {
-//   const prismic = getPrismicClient({});
-//   const posts = await prismic.getByType(TODO);
-
-//   // TODO
-// };
-
-// export const getStaticProps = async ({params }) => {
-//   const prismic = getPrismicClient({});
-//   const response = await prismic.getByUID(TODO);
-
-//   // TODO
-// };
+export const getStaticProps = async ({ params }) => {
+  const prismic = getPrismicClient({})
+  // const response = await prismic.getByUID(TODO)
+  return { props: {} }
+  // TODO
+}
