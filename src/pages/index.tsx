@@ -1,12 +1,15 @@
-import { GetServerSideProps, GetStaticProps } from 'next'
+import next, { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+
+import { useCallback, useState } from 'react'
 import { FiUser, FiCalendar } from 'react-icons/fi'
 import Header from '../components/Header'
+import { getPosts } from '../services/getPosts'
 import { getPrismicClient } from '../services/prismic'
 import styles from './home.module.scss'
 
-type Post = {
+export type Post = {
   uid?: string
   first_publication_date: string | null
   data: {
@@ -26,6 +29,18 @@ type HomeProps = {
 }
 
 export default function Home({ postsPagination }: HomeProps) {
+  const { next_page, results } = postsPagination
+  const [pages, setPages] = useState([next_page])
+  const [posts, setPosts] = useState(results)
+  const loadMorePosts = async () => {
+    fetch(pages.slice(-1)[0])
+      .then(response => response.json())
+      .then(async response => {
+        setPages([...pages, response.next_page])
+        const newPosts = getPosts(response.results)
+        setPosts([...posts, ...newPosts])
+      })
+  }
   return (
     <>
       <Head>
@@ -34,56 +49,58 @@ export default function Home({ postsPagination }: HomeProps) {
       <main className={styles.home_container}>
         <Header />
         <section>
-          {[1, 2, 3, 4, 5].map((_, index) => (
-            <Link href="/post/cra-do-zero" key={_}>
+          {posts.map(post => (
+            <Link href={`/post/${post.uid}`} key={post.uid}>
               <div className={styles.post_preview}>
-                <h1>Criando um app CRA do zero</h1>
-                <p>
-                  Tudo sobre como criar a sua primeira aplicação utilizando
-                  Create React App
-                </p>
+                <h1>{post.data.title}</h1>
+                <p>{post.data.subtitle}</p>
                 <div className={styles.info}>
                   <span>
                     <FiCalendar />
-                    <p>19 Abr 2021</p>
+                    <p>{post.first_publication_date}</p>
                   </span>
                   <span>
                     <FiUser />
-                    <p>Joseph Oliveira</p>
+                    <p>{post.data.author}</p>
                   </span>
                 </div>
               </div>
             </Link>
           ))}
         </section>
-        <footer className={styles.footer}>
-          <span>Carregar mais posts</span>
-        </footer>
+        {pages.slice(-1)[0] && (
+          <footer className={styles.footer}>
+            <button type="button" onClick={() => loadMorePosts()}>
+              Carregar mais posts
+            </button>
+          </footer>
+        )}
       </main>
     </>
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const prismic = getPrismicClient({ req })
-  const response = await prismic.getAllByType('posts', {
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: ['/post/criando-um-app-cra-do-zero'],
+    fallback: true,
+  }
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient()
+  const response = await prismic.getByType('posts', {
     pageSize: 5,
     fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
   })
-  const posts = response.map(post => ({
-    uid: post.uid,
-    first_publication_date: post.first_publication_date,
-    data: {
-      title: post.data.title.text,
-      subtitle: post.data.subtitle.text,
-      author: post.data.author.text,
-    },
-  }))
-  // const postsResponse = await prismic.getByType(TODO);
-  // TODO
+  const posts = getPosts(response.results)
+  console.log(posts)
   return {
     props: {
-      posts,
+      postsPagination: {
+        next_page: response.next_page,
+        results: posts,
+      },
     },
   }
 }

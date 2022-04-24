@@ -4,9 +4,7 @@
 }
 
 .post_preview {
-  & + .post_preview {
-    margin-top: 2.5rem;
-  }
+  margin-top: 2rem;
   height: 6.75rem;
   h1 {
     color: var(--title);
@@ -22,7 +20,7 @@
   align-items: center;
   justify-content: start;
   span {
-    width: 140px;
+    width: 160px;
     display: flex;
     align-items: baseline;
     font-size: 0.875rem;
@@ -33,14 +31,12 @@
     p {
       margin-left: 0.6rem;
     }
-    & + span {
-      margin-left: 2rem;
-    }
   }
 }
 .footer {
   margin-top: 2.5rem;
-  span {
+  button {
+    outline: 0;
     font-weight: 600;
     color: var(--highlight);
     font-size: 1.125rem;
