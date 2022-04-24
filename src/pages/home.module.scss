@@ -1,1 +1,48 @@
-// TODO
+.home_container {
+  max-width: 720px;
+  margin: 4rem auto;
+}
+
+.post_preview {
+  & + .post_preview {
+    margin-top: 2.5rem;
+  }
+  height: 6.75rem;
+  h1 {
+    color: var(--title);
+  }
+  p {
+    margin-top: 0.5rem;
+  }
+}
+
+.info {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  span {
+    width: 140px;
+    display: flex;
+    align-items: baseline;
+    font-size: 0.875rem;
+    height: 32px;
+    svg, p {
+      color: var(--info);
+    }
+    p {
+      margin-left: 0.6rem;
+    }
+    & + span {
+      margin-left: 2rem;
+    }
+  }
+}
+.footer {
+  margin-top: 2.5rem;
+  span {
+    font-weight: 600;
+    color: var(--highlight);
+    font-size: 1.125rem;
+  }
+}
