@@ -19,20 +19,18 @@
   margin-top: 1.5rem;
   margin-bottom: 4rem;
   display: flex;
-  max-width: 22.5rem;
   align-items: center;
   span {
     display: flex;
-    align-items: baseline;
     font-size: 0.875rem;
+    & + span {
+      margin-left: 2rem;
+    }
     svg, p, time {
       color: var(--info);
     }
     p, time {
-      margin-left: 0.6rem;
-    }
-    & + span {
-      margin-left: 2rem;
+      margin-left: 0.5rem;
     }
   }
 }

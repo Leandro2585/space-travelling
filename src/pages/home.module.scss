@@ -6,6 +6,9 @@
 .post_preview {
   margin-top: 2rem;
   height: 6.75rem;
+  &:hover {
+    cursor: pointer;
+  }
   h1 {
     color: var(--title);
   }

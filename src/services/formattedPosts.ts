@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { Post } from '../pages'
 
-export const getPosts = (posts): Post[] => {
+export const formattedPosts = (posts): Post[] => {
   return posts.map(post => ({
     uid: post.uid,
     first_publication_date: format(

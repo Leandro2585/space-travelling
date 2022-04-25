@@ -1,39 +1,40 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable jsx-a11y/alt-text */
 // import { GetStaticPaths, GetStaticProps } from 'next'
+import { format, formatDistance, formatRelative } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
 
-import { GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi'
 import Header from '../../components/Header'
-import styles from './post.module.scss'
 import { getPrismicClient } from '../../services/prismic'
 
-// import commonStyles from '../../styles/common.module.scss'
-// import styles from './post.module.scss'
+import styles from './post.module.scss'
 
-// interface Post {
-//   first_publication_date: string | null
-//   data: {
-//     title: string
-//     banner: {
-//       url: string
-//     }
-//     author: string
-//     content: {
-//       heading: string
-//       body: {
-//         text: string
-//       }[]
-//     }[]
-//   }
-// }
-
-type PostProps = {
-  // post: Post
-  slug: string
+interface Post {
+  first_publication_date: string | null
+  distance_publication_date: string | null
+  data: {
+    title: string
+    banner: {
+      url: string
+    }
+    author: string
+    content: {
+      heading: string
+      body: {
+        text: string
+      }[]
+    }[]
+  }
 }
 
-export default function Post() {
+type PostProps = {
+  post: Post
+}
+
+export default function Post({ post }: PostProps) {
   return (
     <>
       <Head>
@@ -43,42 +44,73 @@ export default function Post() {
         <Header />
         <img src="/images/banner.png" className={styles.hero} />
         <article className={styles.content}>
-          <h1>Criando um app CRA do zero</h1>
+          <h1>{post.data.title}</h1>
           <div className={styles.info}>
             <span>
               <FiCalendar />
-              <time>19 Abr 2021</time>
+              <time>{post.first_publication_date}</time>
             </span>
             <span>
               <FiUser />
-              <p>Joseph Oliveira</p>
+              <p>{post.data.author}</p>
             </span>
             <span>
               <FiClock />
-              <p>4 min</p>
+              <p>{post.distance_publication_date}</p>
             </span>
           </div>
+          <section>
+            {/* <div dangerouslySetInnerHTML={{ __html: post.data.content }} /> */}
+            {post.data.content[0].body.map(({ text }) => {
+              return <div dangerouslySetInnerHTML={{ __html: text }} />
+            })}
+            {/* {post.data.content.map(section => (
+              <>
+                <h2>{section.heading}</h2>
+
+              </>
+            ))} */}
+          </section>
         </article>
       </main>
     </>
   )
 }
 
-// export const getStaticPaths = async () => {
-//   const prismic = getPrismicClient({})
-//   // const posts = await prismic.getByType(TODO)
-//   return { props: {} }
-//   // TODO
-// }
+export const getStaticPaths: GetStaticPaths = async () => {
+  return { fallback: 'blocking', paths: ['/post/criando-um-app-cra-do-zero'] }
+}
 
-// export const getStaticProps: GetStaticProps = async ({ params }) => {
-//   //   const prismic = getPrismicClient({})
-//   const { slug } = params
-//   //   // const response = await prismic.getByUID(TODO)
-//   return {
-//     props: {
-//       slug,
-//     },
-//   }
-//   //   // TODO
-// }
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { slug } = params
+  const prismic = getPrismicClient()
+  const response = await prismic.getByUID('posts', slug.toString(), {})
+  const diffDate = formatRelative(
+    new Date(response.first_publication_date),
+    new Date(),
+    {
+      locale: ptBR,
+    }
+  )
+
+  const post: Post = {
+    distance_publication_date: diffDate,
+    first_publication_date: format(
+      new Date(response.first_publication_date),
+      'dd, MMM yyyy',
+      { locale: ptBR }
+    ),
+    data: {
+      author: response.data.author[0].text,
+      banner: response.data.banner.url,
+      content: response.data.content,
+      title: response.data.title[0].text,
+    },
+  }
+  return {
+    props: {
+      post,
+    },
+  }
+  //   // TODO
+}

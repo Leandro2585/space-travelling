@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { FiUser, FiCalendar } from 'react-icons/fi'
 import Header from '../components/Header'
-import { getPosts } from '../services/getPosts'
+import { formattedPosts } from '../services/formattedPosts'
 import { getPrismicClient } from '../services/prismic'
 import styles from './home.module.scss'
 
@@ -37,7 +37,7 @@ export default function Home({ postsPagination }: HomeProps) {
       .then(response => response.json())
       .then(async response => {
         setPages([...pages, response.next_page])
-        const newPosts = getPosts(response.results)
+        const newPosts = formattedPosts(response.results)
         setPosts([...posts, ...newPosts])
       })
   }
@@ -82,7 +82,7 @@ export default function Home({ postsPagination }: HomeProps) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: ['/post/criando-um-app-cra-do-zero'],
+    paths: ['/'],
     fallback: true,
   }
 }
@@ -93,8 +93,7 @@ export const getStaticProps: GetStaticProps = async () => {
     pageSize: 5,
     fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
   })
-  const posts = getPosts(response.results)
-  console.log(posts)
+  const posts = formattedPosts(response.results)
   return {
     props: {
       postsPagination: {

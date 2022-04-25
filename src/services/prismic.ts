@@ -1,5 +1,4 @@
 import * as prismic from '@prismicio/client'
-import { HttpRequestLike } from '@prismicio/client'
 import { enableAutoPreviews } from '@prismicio/next'
 
 export function getPrismicClient(): prismic.Client {
