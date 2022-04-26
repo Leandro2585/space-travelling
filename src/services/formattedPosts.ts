@@ -1,7 +1,7 @@
 import { Post } from '../pages'
 
 export const formattedPosts = (posts): Post[] => {
-  return posts.map((post: Post) => ({
+  return posts.map(post => ({
     uid: post.uid,
     first_publication_date: post.first_publication_date,
     data: {

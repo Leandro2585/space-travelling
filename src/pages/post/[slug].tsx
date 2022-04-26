@@ -13,15 +13,15 @@ import { getPrismicClient } from '../../services/prismic'
 import styles from './post.module.scss'
 
 interface Post {
-  uid?: string
+  uid: string
   first_publication_date: string | null
   data: {
-    subtitle: string
-    title: string
+    subtitle: [{ text: string }] | string
+    title: [{ text: string }] | string
     banner: {
       url: string
     }
-    author: string
+    author: [{ text: string }] | string
     content: {
       heading: string
       body: {
@@ -58,18 +58,19 @@ export default function Post({ post }: PostProps) {
   })
   // .console.log(content)
   const currentPost: Post = {
+    uid: post.uid,
     first_publication_date: format(
       new Date(post.first_publication_date),
       'dd MMM yyyy',
       { locale: ptBR }
     ),
     data: {
-      subtitle: post.data.subtitle,
-      author: post.data.author,
+      subtitle: post.data.subtitle[0].text,
+      author: post.data.author[0].text,
       banner: {
         url: post.data.banner.url,
       },
-      title: post.data.title,
+      title: post.data.title[0].text,
       content,
     },
   }

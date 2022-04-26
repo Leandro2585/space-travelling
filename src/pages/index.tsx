@@ -3,6 +3,7 @@ import { ptBR } from 'date-fns/locale'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import { useState } from 'react'
 import { FiUser, FiCalendar } from 'react-icons/fi'
@@ -15,9 +16,9 @@ export type Post = {
   uid?: string
   first_publication_date: string | null
   data: {
-    title: string
-    subtitle: string
-    author: string
+    title: [{ text: string }]
+    subtitle: [{ text: string }]
+    author: [{ text: string }]
   }
 }
 
@@ -54,8 +55,8 @@ export default function Home({ postsPagination }: HomeProps) {
           {posts.map(post => (
             <Link href={`/post/${post.uid}`} key={post.uid}>
               <div className={styles.post_preview}>
-                <h1>{post.data.title}</h1>
-                <p>{post.data.subtitle}</p>
+                <h1>{post.data.title[0].text}</h1>
+                <p>{post.data.subtitle[0].text}</p>
                 <div className={styles.info}>
                   <span>
                     <FiCalendar />
@@ -71,7 +72,7 @@ export default function Home({ postsPagination }: HomeProps) {
                   </span>
                   <span>
                     <FiUser />
-                    <p>{post.data.author}</p>
+                    <p>{post.data.author[0].text}</p>
                   </span>
                 </div>
               </div>
@@ -93,7 +94,7 @@ export default function Home({ postsPagination }: HomeProps) {
 export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient()
   const response = await prismic.getByType('posts', {
-    pageSize: 5,
+    pageSize: 1,
     fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
   })
   const posts = formattedPosts(response.results)
