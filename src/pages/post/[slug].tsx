@@ -51,7 +51,9 @@ export default function Post({ post }: PostProps) {
   const content = post.data.content.map(({ heading, body }) => {
     return {
       heading,
-      body: body.map(({ text }) => RichText.asHtml(text)),
+      body: body.map(({ text }) => ({
+        text: RichText.asHtml(text),
+      })),
     }
   })
   // .console.log(content)
@@ -120,6 +122,23 @@ export default function Post({ post }: PostProps) {
   )
 }
 
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    fallback: true,
+    paths: [
+      {
+        params: {
+          slug: 'criando-um-app-cra-do-zero',
+        },
+      },
+      {
+        params: {
+          slug: 'como-utilizar-hooks',
+        },
+      },
+    ],
+  }
+}
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug } = params
