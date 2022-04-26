@@ -3,7 +3,6 @@ import { ptBR } from 'date-fns/locale'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 
 import { useState } from 'react'
 import { FiUser, FiCalendar } from 'react-icons/fi'
@@ -16,9 +15,9 @@ export type Post = {
   uid?: string
   first_publication_date: string | null
   data: {
-    title: [{ text: string }]
-    subtitle: [{ text: string }]
-    author: [{ text: string }]
+    title: string
+    subtitle: string
+    author: string
   }
 }
 
@@ -55,8 +54,8 @@ export default function Home({ postsPagination }: HomeProps) {
           {posts.map(post => (
             <Link href={`/post/${post.uid}`} key={post.uid}>
               <div className={styles.post_preview}>
-                <h1>{post.data.title[0].text}</h1>
-                <p>{post.data.subtitle[0].text}</p>
+                <h1>{post.data.title}</h1>
+                <p>{post.data.subtitle}</p>
                 <div className={styles.info}>
                   <span>
                     <FiCalendar />
@@ -72,7 +71,7 @@ export default function Home({ postsPagination }: HomeProps) {
                   </span>
                   <span>
                     <FiUser />
-                    <p>{post.data.author[0].text}</p>
+                    <p>{post.data.author}</p>
                   </span>
                 </div>
               </div>

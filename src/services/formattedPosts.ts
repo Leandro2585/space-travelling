@@ -5,9 +5,18 @@ export const formattedPosts = (posts): Post[] => {
     uid: post.uid,
     first_publication_date: post.first_publication_date,
     data: {
-      title: post.data.title,
-      subtitle: post.data.subtitle,
-      author: post.data.author,
+      title:
+        typeof post.data.title === 'string'
+          ? post.data.title
+          : post.data.title[0].text,
+      subtitle:
+        typeof post.data.subtitle === 'string'
+          ? post.data.subtitle
+          : post.data.subtitle[0].text,
+      author:
+        typeof post.data.author === 'string'
+          ? post.data.author
+          : post.data.author[0].text,
     },
   }))
 }

@@ -13,11 +13,11 @@ import Post, { getStaticProps, getStaticPaths } from '../../pages/post/[slug]'
 interface Post {
   first_publication_date: string | null
   data: {
-    title: [{ text: string }]
+    title: string
     banner: {
       url: string
     }
-    author: [{ text: string }]
+    author: string
     content: {
       heading: string
       body: Record<string, unknown>[]
@@ -57,9 +57,9 @@ const mockedGetByUIDReturn = {
   uid: 'como-utilizar-hooks',
   first_publication_date: '2021-03-25T19:25:28+0000',
   data: {
-    title: [{ text: 'Como utilizar Hooks' }],
-    subtitle: [{ text: 'Pensando em sincronização em vez de ciclos de vida' }],
-    author: [{ text: 'Joseph Oliveira' }],
+    title: 'Como utilizar Hooks',
+    subtitle: 'Pensando em sincronização em vez de ciclos de vida',
+    author: 'Joseph Oliveira',
     banner: {
       url: 'https://images.prismic.io/criando-projeto-do-zero/95494d57-eee2-4adb-9883-befa9829abca_christopher-gower-m_HRfLhgABo-unsplash.jpg?auto=compress,format',
     },
@@ -179,10 +179,6 @@ const mockedGetByUIDReturn = {
     ],
   },
 }
-
-jest
-  .useFakeTimers('modern')
-  .setSystemTime(new Date('2021-03-25T19:29:28+0000').getTime())
 
 jest.mock('@prismicio/client')
 jest.mock('../../services/prismic')

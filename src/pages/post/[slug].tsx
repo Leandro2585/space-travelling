@@ -16,12 +16,12 @@ interface Post {
   uid: string
   first_publication_date: string | null
   data: {
-    subtitle: [{ text: string }] | string
-    title: [{ text: string }] | string
+    subtitle: string
+    title: string
     banner: {
       url: string
     }
-    author: [{ text: string }] | string
+    author: string
     content: {
       heading: string
       body: {
@@ -56,7 +56,6 @@ export default function Post({ post }: PostProps) {
       })),
     }
   })
-  // .console.log(content)
   const currentPost: Post = {
     uid: post.uid,
     first_publication_date: format(
@@ -65,12 +64,12 @@ export default function Post({ post }: PostProps) {
       { locale: ptBR }
     ),
     data: {
-      subtitle: post.data.subtitle[0].text,
-      author: post.data.author[0].text,
+      subtitle: post.data.subtitle,
+      author: post.data.author,
       banner: {
         url: post.data.banner.url,
       },
-      title: post.data.title[0].text,
+      title: post.data.title,
       content,
     },
   }
@@ -95,13 +94,14 @@ export default function Post({ post }: PostProps) {
             </span>
             <span>
               <FiClock />
+              <p>4 min</p>
               <p>{diffDate}</p>
             </span>
           </div>
           <section className={styles.content}>
-            {currentPost.data.content.map((currentContent, index) => (
+            {currentPost.data.content.map(currentContent => (
               // eslint-disable-next-line react/no-array-index-key
-              <div key={index}>
+              <div key={currentContent.heading}>
                 <h2
                   dangerouslySetInnerHTML={{ __html: currentContent.heading }}
                 />
@@ -149,11 +149,20 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     uid: response.uid,
     first_publication_date: response.first_publication_date,
     data: {
-      author: response.data.author,
       banner: { url: response.data.banner.url },
       content: response.data.content,
-      subtitle: response.data.subtitle,
-      title: response.data.title,
+      author:
+        typeof response.data.author === 'string'
+          ? response.data.author
+          : response.data.author[0].text,
+      subtitle:
+        typeof response.data.subtitle === 'string'
+          ? response.data.subtitle
+          : response.data.subtitle[0].text,
+      title:
+        typeof response.data.title === 'string'
+          ? response.data.title
+          : response.data.title[0].text,
     },
   }
   return {

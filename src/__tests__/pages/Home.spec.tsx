@@ -10,9 +10,9 @@ interface Post {
   uid?: string
   first_publication_date: string | null
   data: {
-    title: [{ text: string }]
-    subtitle: [{ text: string }]
-    author: [{ text: string }]
+    title: string
+    subtitle: string
+    author: string
   }
 }
 
@@ -36,24 +36,19 @@ const mockedGetByTypeReturn = {
       uid: 'como-utilizar-hooks',
       first_publication_date: '2021-03-15T19:25:28+0000',
       data: {
-        title: [{ text: 'Como utilizar Hooks' }],
-        subtitle: [
-          { text: 'Pensando em sincronização em vez de ciclos de vida' },
-        ],
-        author: [{ text: 'Joseph Oliveira' }],
+        title: 'Como utilizar Hooks',
+        subtitle: 'Pensando em sincronização em vez de ciclos de vida',
+        author: 'Joseph Oliveira',
       },
     },
     {
       uid: 'criando-um-app-cra-do-zero',
       first_publication_date: '2021-03-25T19:27:35+0000',
       data: {
-        title: [{ text: 'Criando um app CRA do zero' }],
-        subtitle: [
-          {
-            text: 'Tudo sobre como criar a sua primeira aplicação utilizando Create React App',
-          },
-        ],
-        author: [{ text: 'Danilo Vieira' }],
+        title: 'Criando um app CRA do zero',
+        subtitle:
+          'Tudo sobre como criar a sua primeira aplicação utilizando Create React App',
+        author: 'Danilo Vieira',
       },
     },
   ],
@@ -99,13 +94,10 @@ describe('Home', () => {
                 uid: 'criando-um-app-cra-do-zero',
                 first_publication_date: '2021-03-25T19:27:35+0000',
                 data: {
-                  title: [{ text: 'Criando um app CRA do zero' }],
-                  subtitle: [
-                    {
-                      text: 'Tudo sobre como criar a sua primeira aplicação utilizando Create React App',
-                    },
-                  ],
-                  author: [{ text: 'Danilo Vieira' }],
+                  title: 'Criando um app CRA do zero',
+                  subtitle:
+                    'Tudo sobre como criar a sua primeira aplicação utilizando Create React App',
+                  author: 'Danilo Vieira',
                 },
               },
             ],
@@ -186,11 +178,9 @@ describe('Home', () => {
         uid: 'como-utilizar-hooks',
         first_publication_date: '2021-03-15T19:25:28+0000',
         data: {
-          title: [{ text: 'Como utilizar Hooks' }],
-          subtitle: [
-            { text: 'Pensando em sincronização em vez de ciclos de vida' },
-          ],
-          author: [{ text: 'Joseph Oliveira' }],
+          title: 'Como utilizar Hooks',
+          subtitle: 'Pensando em sincronização em vez de ciclos de vida',
+          author: 'Joseph Oliveira',
         },
       },
     ]
