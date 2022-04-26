@@ -1,8 +1,10 @@
-import next, { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { FiUser, FiCalendar } from 'react-icons/fi'
 import Header from '../components/Header'
 import { formattedPosts } from '../services/formattedPosts'
@@ -57,7 +59,15 @@ export default function Home({ postsPagination }: HomeProps) {
                 <div className={styles.info}>
                   <span>
                     <FiCalendar />
-                    <p>{post.first_publication_date}</p>
+                    <p>
+                      {format(
+                        new Date(post.first_publication_date),
+                        'dd MMM yyyy',
+                        {
+                          locale: ptBR,
+                        }
+                      )}
+                    </p>
                   </span>
                   <span>
                     <FiUser />
@@ -78,13 +88,6 @@ export default function Home({ postsPagination }: HomeProps) {
       </main>
     </>
   )
-}
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: ['/'],
-    fallback: true,
-  }
 }
 
 export const getStaticProps: GetStaticProps = async () => {

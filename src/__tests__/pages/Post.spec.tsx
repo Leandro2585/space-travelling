@@ -180,6 +180,10 @@ const mockedGetByUIDReturn = {
   },
 }
 
+jest
+  .useFakeTimers('modern')
+  .setSystemTime(new Date('2021-03-25T19:29:28+0000').getTime())
+
 jest.mock('@prismicio/client')
 jest.mock('../../services/prismic')
 jest.mock('next/router')
