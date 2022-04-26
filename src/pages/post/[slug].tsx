@@ -52,7 +52,7 @@ export default function Post({ post }: PostProps) {
     return {
       heading,
       body: body.map(({ text }) => ({
-        text: RichText.asHtml(text),
+        text,
       })),
     }
   })
@@ -128,12 +128,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: [
       {
         params: {
-          slug: 'criando-um-app-cra-do-zero',
+          slug: 'como-utilizar-hooks',
         },
       },
       {
         params: {
-          slug: 'como-utilizar-hooks',
+          slug: 'criando-um-app-cra-do-zero',
         },
       },
     ],
